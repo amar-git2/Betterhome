@@ -1,4 +1,13 @@
-const shortcutLinks = [new ShortcutLink("Youtube", "https://www.youtube.com")];
+const localStorageShortcutLinks = JSON.parse(localStorage.getItem("shortcutLinks")) || "false";
+let shortcutLinks = [new ShortcutLink("Youtube", "https://www.youtube.com")];;
+
+if (localStorageShortcutLinks !== "false") {
+    shortcutLinks = [];
+    localStorageShortcutLinks.forEach((shortcutLink) => {
+        shortcutLinks.push(new ShortcutLink(shortcutLink.title, shortcutLink.url));
+    });
+};
+ 
 const shortcutLinksView = document.getElementById("shortcut-links-view");
 
 const searchInput = document.getElementById("search-input");
@@ -29,6 +38,10 @@ function ShortcutLink(title, url) {
 
 ShortcutLink.prototype.goToUrl = function() {
     window.location.href = this.url;
+};
+
+function saveShortcutLinks() {
+    localStorage.setItem("shortcutLinks", JSON.stringify(shortcutLinks));
 };
 
 function renderShortcutLInks() {
@@ -81,6 +94,7 @@ function renderShortcutLInks() {
         
                         shortcutLinks.push(new ShortcutLink(title, url));
                         renderShortcutLInks();
+                        saveShortcutLinks();
                     }
                 };
             };
